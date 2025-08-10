@@ -1,12 +1,12 @@
 # Appointment Booking App
 
-A minimal full-stack appointment booking app for a small clinic.
+A full-stack appointment booking app for a small clinic.
 
 ## Tech Stack
 - **Frontend:** ReactJS (Vite, Material UI)
 - **Backend:** Node.js, Express
-- **Database:** MongoDB (Atlas Free) or Postgres (Neon/Railway)
-- **Deployment:** Vercel/Netlify (frontend), Render/Railway/Fly.io (backend)
+- **Database:** MongoDB Atlas
+- **Deployment:** Vercel(frontend), Render (backend)
 
 ## Features
 - Patient: Register, login, view slots, book slot, view bookings
@@ -34,11 +34,10 @@ A minimal full-stack appointment booking app for a small clinic.
    ```
 4. **Environment variables:**
    - Backend: `MONGO_URI` or `DATABASE_URL`, `JWT_SECRET`
-   - Frontend: Update API URL in `src/api.js` if needed
 
 ## Deployment
-- **Frontend:** Deploy to Vercel/Netlify/Cloudflare Pages
-- **Backend:** Deploy to Render/Railway/Fly.io
+- **Frontend:** Deploy to Vercel
+- **Backend:** Deploy to Render
 
 ## Test Credentials
 - Patient: `patient@example.com` / `Passw0rd!`
@@ -80,8 +79,8 @@ curl http://localhost:5003/api/my-bookings -H 'Authorization: Bearer <token>'
 - Next: Add tests, CI, more admin features
 
 ## Submission Checklist
-- [ ] Frontend URL: ______
-- [ ] API URL: ______
-- [ ] Repo URL: ______
-- [ ] Run locally: README steps verified
-- [ ] Postman/curl steps included
+- [✅] Frontend URL: https://assignment-wundrsight-dss1-4cp729cj3.vercel.app/
+- [✅] API URL: https://assignment-wundrsight.onrender.com/
+- [✅] Repo URL: https://github.com/imhrsit/assignment-wundrsight
+- [✅] Run locally: README steps verified
+- [✅] Postman/curl steps included
