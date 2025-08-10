@@ -79,7 +79,7 @@ curl http://localhost:5003/api/my-bookings -H 'Authorization: Bearer <token>'
 - Next: Add tests, CI, more admin features
 
 ## Submission Checklist
-- [✅] Frontend URL: https://assignment-wundrsight-dss1-4cp729cj3.vercel.app/
+- [✅] Frontend URL: https://assignment-wundrsight-fpyz-h9w5uvyty.vercel.app
 - [✅] API URL: https://assignment-wundrsight.onrender.com/
 - [✅] Repo URL: https://github.com/imhrsit/assignment-wundrsight
 - [✅] Run locally: README steps verified
