@@ -6,8 +6,11 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: 'https://your-vercel-app.vercel.app', // or '*' for demo
-    credentials: true
+  origin: [
+    'http://localhost:5173',
+    'https://assignment-wundrsight.onrender.com/api'
+  ],
+  credentials: true
 }));
 app.use(express.json());
 
