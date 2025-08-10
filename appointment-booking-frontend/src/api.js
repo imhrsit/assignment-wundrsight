@@ -1,5 +1,4 @@
-const API_URL = 'https://assignment-wundrsight.onrender.com';
-
+const API_URL = 'https://assignment-wundrsight.onrender.com/api';
 export async function register(name, email, password) {
     const res = await fetch(`${API_URL}/register`, {
         method: 'POST',
