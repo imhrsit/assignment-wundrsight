@@ -22,6 +22,10 @@ export default function PatientDashboard({ auth }) {
     }, [auth.token]);
 
     const handleBook = async slotId => {
+        if (!slotId) {
+            setError('Invalid slot. Please try again.');
+            return;
+        }
         setLoading(true);
         setError('');
         const res = await bookSlot(auth.token, slotId);

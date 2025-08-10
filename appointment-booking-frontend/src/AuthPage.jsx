@@ -15,9 +15,27 @@ export default function AuthPage({ setAuth }) {
 
     const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
+    const validateEmail = email => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+    const validatePassword = password => password.length >= 6;
+
     const handleSubmit = async e => {
         e.preventDefault();
         setError('');
+
+        // Input validation
+        if (!validateEmail(form.email)) {
+            setError('Please enter a valid email address.');
+            return;
+        }
+        if (!validatePassword(form.password)) {
+            setError('Password must be at least 6 characters.');
+            return;
+        }
+        if (!isLogin && !form.name.trim()) {
+            setError('Name is required for registration.');
+            return;
+        }
+
         setLoading(true);
         try {
             if (isLogin) {
