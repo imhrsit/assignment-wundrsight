@@ -5,7 +5,10 @@ const connectDB = require("./config/db");
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://your-vercel-app.vercel.app', // or '*' for demo
+    credentials: true
+}));
 app.use(express.json());
 
 // Routes
