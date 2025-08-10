@@ -1,5 +1,12 @@
+
 import React, { useEffect, useState } from 'react';
 import { getSlots, bookSlot, getMyBookings } from './api';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Fade from '@mui/material/Fade';
 
 export default function PatientDashboard({ auth }) {
     const [slots, setSlots] = useState([]);
@@ -28,45 +35,83 @@ export default function PatientDashboard({ auth }) {
     };
 
     return (
-        <div className="space-y-8">
-            {/* Available Slots */}
-            <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">Available Slots</h2>
-                {slots.length === 0 && <p className="text-gray-500">No slots available.</p>}
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Fade in={true} timeout={500}>
+            <div>
+                {/* Available Slots */}
+                <Typography variant="h4" fontWeight={700} color="primary" mb={2}>
+                    Available Slots
+                </Typography>
+                {slots.length === 0 && (
+                    <Typography color="text.secondary">No slots available.</Typography>
+                )}
+                <Grid container spacing={3}>
                     {slots.map(slot => (
-                        <li key={slot._id} className="p-5 bg-white border border-gray-200 rounded-xl shadow hover:shadow-lg transition flex flex-col gap-3">
-                            <p className="text-gray-800 font-medium">
-                                {new Date(slot.start_at).toLocaleString()}<br /> to <br />{new Date(slot.end_at).toLocaleString()}
-                            </p>
-                            <button
-                                disabled={loading}
-                                onClick={() => handleBook(slot._id)}
-                                className="px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-lg shadow hover:scale-[1.02] transition disabled:opacity-50 font-semibold"
+                        <Grid item xs={12} md={6} key={slot._id}>
+                            <Card
+                                elevation={2}
+                                sx={{
+                                    borderRadius: 2,
+                                    transition: 'box-shadow 0.2s',
+                                    bgcolor: 'background.paper',
+                                    border: '1px solid #e0e0e0',
+                                    boxShadow: '0 2px 8px 0 rgba(33,150,243,0.08)',
+                                    p: 2,
+                                }}
                             >
-                                Book
-                            </button>
-                        </li>
+                                <CardContent>
+                                    <Typography variant="subtitle1" fontWeight={600} color="primary">
+                                        {new Date(slot.start_at).toLocaleString()}<br /> to <br />{new Date(slot.end_at).toLocaleString()}
+                                    </Typography>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={loading}
+                                        onClick={() => handleBook(slot._id)}
+                                        sx={{ mt: 2, fontWeight: 600, borderRadius: 2, fontSize: '1rem' }}
+                                    >
+                                        Book
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     ))}
-                </ul>
-            </section>
+                </Grid>
 
-            {/* My Bookings */}
-            <section>
-                <h2 className="text-2xl font-bold text-gray-800 mb-4">My Bookings</h2>
-                {bookings.length === 0 && <p className="text-gray-500">You have no bookings yet.</p>}
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* My Bookings */}
+                <Typography variant="h4" fontWeight={700} color="primary" mt={6} mb={2}>
+                    My Bookings
+                </Typography>
+                {bookings.length === 0 && (
+                    <Typography color="text.secondary">You have no bookings yet.</Typography>
+                )}
+                <Grid container spacing={3}>
                     {bookings.map(b => (
-                        <li key={b._id} className="p-5 bg-white border border-gray-200 rounded-xl shadow hover:shadow-lg transition">
-                            <p className="text-gray-800 font-medium">
-                                {new Date(b.slot_id.start_at).toLocaleString()}<br /> to <br />{new Date(b.slot_id.end_at).toLocaleString()}
-                            </p>
-                        </li>
+                        <Grid item xs={12} md={6} key={b._id}>
+                            <Card
+                                elevation={2}
+                                sx={{
+                                    borderRadius: 2,
+                                    transition: 'box-shadow 0.2s',
+                                    bgcolor: 'background.paper',
+                                    border: '1px solid #e0e0e0',
+                                    boxShadow: '0 2px 8px 0 rgba(33,150,243,0.08)',
+                                    p: 2,
+                                }}
+                            >
+                                <CardContent>
+                                    <Typography variant="subtitle1" fontWeight={600} color="primary">
+                                        {new Date(b.slot_id.start_at).toLocaleString()}<br /> to <br />{new Date(b.slot_id.end_at).toLocaleString()}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
                     ))}
-                </ul>
-            </section>
+                </Grid>
 
-            {error && <div className="text-red-500 font-medium">{error}</div>}
-        </div>
+                {error && (
+                    <Typography color="error" fontWeight={600} mt={3}>{error}</Typography>
+                )}
+            </div>
+        </Fade>
     );
 }

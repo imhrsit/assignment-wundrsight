@@ -1,5 +1,11 @@
+
 import React, { useEffect, useState } from 'react';
 import { getAllBookings } from './api';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import Fade from '@mui/material/Fade';
 
 export default function AdminDashboard({ auth }) {
   const [bookings, setBookings] = useState([]);
@@ -9,28 +15,46 @@ export default function AdminDashboard({ auth }) {
   }, [auth.token]);
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold text-gray-800">All Bookings</h2>
+    <Fade in={true} timeout={500}>
+      <div>
+        <Typography variant="h4" fontWeight={700} color="primary" gutterBottom>
+          All Bookings
+        </Typography>
 
-      {bookings.length === 0 && (
-        <p className="text-gray-500 text-center">No bookings yet.</p>
-      )}
+        {bookings.length === 0 && (
+          <Typography color="text.secondary" align="center">
+            No bookings yet.
+          </Typography>
+        )}
 
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {bookings.map(b => (
-          <li
-            key={b._id}
-            className="p-5 bg-white border border-gray-200 rounded-xl shadow hover:shadow-lg transition"
-          >
-            <p className="font-semibold text-gray-800">{b.user_id?.email || 'Unknown'}</p>
-            <p className="text-sm text-gray-500 mt-1">
-              {new Date(b.slot_id.start_at).toLocaleString()}
-              <br /> to <br />
-              {new Date(b.slot_id.end_at).toLocaleString()}
-            </p>
-          </li>
-        ))}
-      </ul>
-    </div>
+        <Grid container spacing={3}>
+          {bookings.map(b => (
+            <Grid item xs={12} md={6} key={b._id}>
+              <Card
+                elevation={2}
+                sx={{
+                  borderRadius: 2,
+                  transition: 'box-shadow 0.2s',
+                  bgcolor: 'background.paper',
+                  border: '1px solid #e0e0e0',
+                  boxShadow: '0 2px 8px 0 rgba(33,150,243,0.08)',
+                  p: 2,
+                }}
+              >
+                <CardContent>
+                  <Typography variant="subtitle1" fontWeight={600} color="primary">
+                    {b.user_id?.email || 'Unknown'}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" mt={1}>
+                    {new Date(b.slot_id.start_at).toLocaleString()}<br /> to <br />
+                    {new Date(b.slot_id.end_at).toLocaleString()}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </div>
+    </Fade>
   );
 }

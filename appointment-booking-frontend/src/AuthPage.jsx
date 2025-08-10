@@ -1,5 +1,11 @@
+
 import React, { useState } from 'react';
 import { login, register } from './api';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Fade from '@mui/material/Fade';
 
 export default function AuthPage({ setAuth }) {
     const [isLogin, setIsLogin] = useState(true);
@@ -36,64 +42,74 @@ export default function AuthPage({ setAuth }) {
     };
 
     return (
-        <div className="animate-fade-in">
-            <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 max-w-md mx-auto">
-                <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-                    {isLogin ? 'Login to Your Account' : 'Create Your Account'}
-                </h2>
+        <Fade in={true} timeout={400}>
+            <Box>
+                <Box sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 2, boxShadow: 2, maxWidth: 400, mx: 'auto', border: '1px solid #e0e0e0' }}>
+                    <Typography variant="h5" fontWeight={700} color="primary" align="center" mb={3}>
+                        {isLogin ? 'Login to Your Account' : 'Create Your Account'}
+                    </Typography>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    {!isLogin && (
-                        <input
-                            name="name"
-                            placeholder="Name"
-                            value={form.name}
-                            onChange={handleChange}
-                            required
-                            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-pink-400 focus:ring-2 focus:ring-pink-200 bg-white text-gray-800"
-                        />
-                    )}
-                    <input
-                        name="email"
-                        placeholder="Email"
-                        value={form.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-200 bg-white text-gray-800"
-                    />
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        value={form.password}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white text-gray-800"
-                    />
+                    <form onSubmit={handleSubmit}>
+                        <Box display="flex" flexDirection="column" gap={2}>
+                            {!isLogin && (
+                                <TextField
+                                    name="name"
+                                    label="Name"
+                                    value={form.name}
+                                    onChange={handleChange}
+                                    required
+                                    variant="outlined"
+                                    color="secondary"
+                                />
+                            )}
+                            <TextField
+                                name="email"
+                                label="Email"
+                                value={form.email}
+                                onChange={handleChange}
+                                required
+                                variant="outlined"
+                                color="primary"
+                                type="email"
+                            />
+                            <TextField
+                                name="password"
+                                label="Password"
+                                type="password"
+                                value={form.password}
+                                onChange={handleChange}
+                                required
+                                variant="outlined"
+                                color="secondary"
+                            />
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                disabled={loading}
+                                sx={{ fontWeight: 600, borderRadius: 2, py: 1.5, fontSize: '1rem' }}
+                            >
+                                {loading ? 'Please wait...' : isLogin ? 'Login' : 'Register'}
+                            </Button>
+                        </Box>
+                    </form>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-3 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow hover:shadow-lg hover:scale-[1.02] transition-transform disabled:opacity-50"
+                    <Typography
+                        onClick={() => { setIsLogin(!isLogin); setError(''); }}
+                        align="center"
+                        mt={3}
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ cursor: 'pointer', '&:hover': { color: 'secondary.main' }, transition: 'color 0.2s' }}
                     >
-                        {loading ? 'Please wait...' : isLogin ? 'Login' : 'Register'}
-                    </button>
-                </form>
+                        {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
+                    </Typography>
 
-                <p
-                    onClick={() => { setIsLogin(!isLogin); setError(''); }}
-                    className="mt-4 text-center text-sm text-gray-600 cursor-pointer hover:text-pink-500 transition"
-                >
-                    {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}
-                </p>
-
-                {error && <div className="mt-4 text-center text-red-500 font-medium">{error}</div>}
-            </div>
-
-            <style>{`
-        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fade-in 0.4s ease-out; }
-    `}</style>
-        </div>
+                    {error && (
+                        <Typography align="center" color="error" fontWeight={600} mt={2}>{error}</Typography>
+                    )}
+                </Box>
+            </Box>
+        </Fade>
     );
 }
