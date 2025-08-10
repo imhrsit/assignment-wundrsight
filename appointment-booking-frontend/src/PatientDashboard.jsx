@@ -26,7 +26,7 @@ export default function PatientDashboard({ auth }) {
         setError('');
         const res = await bookSlot(auth.token, slotId);
         if (res.booking) {
-            setBookings([...bookings, res.booking]);
+            getMyBookings(auth.token).then(setBookings);
             setSlots(slots.filter(s => s._id !== slotId));
         } else {
             setError(res.error?.message || 'Booking failed');

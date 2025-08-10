@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import AuthPage from './AuthPage.jsx';
 import PatientDashboard from './PatientDashboard.jsx';
 import AdminDashboard from './AdminDashboard.jsx';
@@ -9,6 +10,11 @@ import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
+
+function MyBookings() { return <div>My Bookings Page (TODO)</div>; }
+function BookSlot() { return <div>Book Slot Page (TODO)</div>; }
+function AllBookings() { return <div>All Bookings Page (TODO)</div>; }
+function NotFound() { return <div>404 - Page Not Found</div>; }
 
 const theme = createTheme({
   palette: {
@@ -77,12 +83,23 @@ const theme = createTheme({
   },
 });
 
+
 function App() {
   const [auth, setAuth] = useState(() => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
     return token ? { token, role } : null;
   });
+
+  React.useEffect(() => {
+    const syncAuth = () => {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+      setAuth(token ? { token, role } : null);
+    };
+    window.addEventListener('storage', syncAuth);
+    return () => window.removeEventListener('storage', syncAuth);
+  }, []);
 
   const handleAuth = ({ token, role }) => {
     localStorage.setItem('token', token);
@@ -106,9 +123,9 @@ function App() {
           flexDirection: 'column',
         }}
       >
-        {auth ? (
-          <>
-            <Box component="header" sx={{ display: 'flex', justifyContent: 'flex-end', px: 4, py: 3 }}>
+        <BrowserRouter>
+          <Box component="header" sx={{ display: 'flex', justifyContent: 'flex-end', px: 4, py: 3 }}>
+            {auth && (
               <Slide direction="down" in={true} mountOnEnter unmountOnExit>
                 <Button
                   variant="contained"
@@ -127,28 +144,27 @@ function App() {
                   Logout
                 </Button>
               </Slide>
-            </Box>
-            <Container maxWidth="md" sx={{ flex: 1, py: 4 }}>
-              <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-                <Box sx={{ bgcolor: 'background.paper', borderRadius: 4, boxShadow: 6, p: 4 }}>
-                  {auth.role === 'admin' ? (
-                    <AdminDashboard auth={auth} />
-                  ) : (
-                    <PatientDashboard auth={auth} />
-                  )}
-                </Box>
-              </Slide>
-            </Container>
-          </>
-        ) : (
-          <Container maxWidth="sm" sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-              <Box sx={{ bgcolor: 'background.paper', borderRadius: 4, boxShadow: 6, p: 4, width: '100%' }}>
-                <AuthPage setAuth={handleAuth} />
-              </Box>
-            </Slide>
+            )}
+          </Box>
+          <Container maxWidth="md" sx={{ flex: 1, py: 4 }}>
+            <Routes>
+              {/* login/register */}
+              <Route path="/" element={auth ? <Navigate to={auth.role === 'admin' ? '/admin' : '/dashboard'} /> : <AuthPage setAuth={handleAuth} />} />
+
+              {/* Patient routes */}
+              <Route path="/dashboard" element={auth && auth.role === 'patient' ? <PatientDashboard auth={auth} /> : <Navigate to="/" />} />
+              <Route path="/my-bookings" element={auth && auth.role === 'patient' ? <MyBookings /> : <Navigate to="/" />} />
+              <Route path="/book-slot" element={auth && auth.role === 'patient' ? <BookSlot /> : <Navigate to="/" />} />
+
+              {/* Admin routes */}
+              <Route path="/admin" element={auth && auth.role === 'admin' ? <AdminDashboard auth={auth} /> : <Navigate to="/" />} />
+              <Route path="/all-bookings" element={auth && auth.role === 'admin' ? <AllBookings /> : <Navigate to="/" />} />
+
+              {/* 404 fallback */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </Container>
-        )}
+        </BrowserRouter>
       </Box>
     </ThemeProvider>
   );
